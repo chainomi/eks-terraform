@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+   type: ClusterIP #used for internal services that will not be exposed
+   ports:
+   - port: 3306
+     targetPort: 3306  #if not included it will assune port (service port) to be the same as targetPort (pod port)
+    #  nodePort: 30004
+   selector:
+    app: mysql #this is used to bind this service to the deployment 
+    tier: database
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deployment
+  labels:
+    app: mysql 
+    tier: database
+spec:
+  selector:
+    matchLabels:
+      app: mysql 
+      tier: database
+  replicas: 1
+  template:
+    metadata:
+      name: mysql
+      labels:
+        app: mysql 
+        tier: database
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.6
+          ports:
+          - containerPort: 3306
+            name: mysql
+          envFrom:
+          - configMapRef:
+              name: mysql-config                   
+         
