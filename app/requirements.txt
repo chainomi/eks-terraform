@@ -1,0 +1,4 @@
+Flask
+Requests
+redis
+python-dotenv
