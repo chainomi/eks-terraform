@@ -29,3 +29,6 @@ override.tf.json
 # example: *tfplan*
 
 k8s/
+
+#kube config
+kubeconfig*.*

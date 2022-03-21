@@ -1,4 +1,4 @@
-# Learn Terraform - Provision an EKS Cluster
+# Terraform EKS cluster
 
 This repo is a companion repo to the [Provision an EKS Cluster learn guide](https://learn.hashicorp.com/terraform/kubernetes/provision-eks-cluster), containing
 Terraform configuration files to provision an EKS cluster on AWS.
@@ -9,8 +9,8 @@ Terraform configuration files to provision an EKS cluster on AWS.
 ### Build EKS cluster, Networking and ECR
 a. `cd terraform/`
 b. `terraform init`
-c. `terraform plan -var-file=env/dev.tfvars`
-d. `terraform apply -var-file=env/dev.tfvars --auto-approve`
+c. `terraform plan -var-file=env/<env>.tfvars`
+d. `terraform apply -var-file=env/<env>.tfvars --auto-approve`
 
 ### Add k8s cluster roles for EKS cluster
  This cannot be deployed with the cluster and needs to be done seperately. By default the k8s cluster roles resources are disabled. They have to be enabled using command below for subsequent terraform apply commands.
