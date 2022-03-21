@@ -5,5 +5,5 @@ node_instance_type ="t2.small"
 minimum_nodes = 2
 desired_nodes = 2
 maximum_nodes = 4
-#admin_access_role_name = ""
+admin_access_role_name = ""
 read_access_role_name = "developer_role"
