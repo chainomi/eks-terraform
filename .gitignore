@@ -31,4 +31,4 @@ override.tf.json
 k8s/
 
 #kube config
-kubeconfig*.*
+kubeconfig*
