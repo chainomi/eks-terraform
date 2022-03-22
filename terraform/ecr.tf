@@ -1,17 +1,14 @@
-resource "aws_ecr_repository" "clusterRepo" {
-  name                 = "app"
-  
+module "ecr" {
+  source  = "cloudposse/ecr/aws"
+  version = "0.33.0"
+
+  image_names = var.service_list
+
   image_tag_mutability = "MUTABLE"
+  scan_images_on_push = true
 
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = {
-    "environment" = var.environment
-  }
 }
+
 
 # Retrieving AWS account ID for ECR push command
 data "aws_caller_identity" "current" {}
-

@@ -1,9 +1,9 @@
 
-# Kubernetes cluster role IAM policy and attachment
+# Kubernetes read cluster role IAM policy and attachment
 
-resource "aws_iam_policy" "clusterRole-policy" {
-  name        = "eks-cluster-role-policy"
-  description = "IAM cluster role policy"
+resource "aws_iam_policy" "read-clusterRole-policy" {
+  name        = "eks-read-cluster-role-policy"
+  description = "IAM eks read cluster role policy"
 
   policy = <<EOF
 {
@@ -29,18 +29,17 @@ EOF
 }
 
 
-data "aws_iam_role" "eks_ClusterRole" {
+data "aws_iam_role" "eks_read_ClusterRole" {
   name = var.read_access_role_name # gets name from existing read access role in AWS IAM
 
 }
 
 
-resource "aws_iam_policy_attachment" "eks_ClusterRole_attachment" {
-  name       = "eks_ClusterRole-attachment"
-  roles      = [data.aws_iam_role.eks_ClusterRole.name]
-  # roles      = [var.aws_iam_role_arn]
+resource "aws_iam_policy_attachment" "eks_read_ClusterRole_attachment" {
+  name       = "eks_read_ClusterRole-attachment"
+  roles      = [data.aws_iam_role.eks_read_ClusterRole.name]
 
-  policy_arn = aws_iam_policy.clusterRole-policy.arn
+  policy_arn = aws_iam_policy.read-clusterRole-policy.arn
 }
 
 

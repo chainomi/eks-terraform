@@ -25,9 +25,9 @@ variable "maximum_nodes" {
     description = "maximum number of worker nodes"
 }
 
-# variable "admin_access_role_name"{
-#     description = "the name of the admin role in AWS, this will map the Admin role to the cluster role xxxx .."
-# }
+variable "admin_access_role_name"{
+    description = "the name of the admin role in AWS, this will map the Admin role to the cluster role xxxx .."
+}
 
 variable "read_access_role_name"{
     description = "the name of the IAM role you wish to assign read access to in the eks cluster"
@@ -36,6 +36,9 @@ variable "read_access_role_name"{
 variable "rbac_enabled" {
   type        = bool
   default     = true
-  description = "Variable indicating whether access roles for cluster is enabled."
+  description = "Used to enable or disable access roles for cluster"
 }
 
+variable "service_list" {
+    description = "List of services or applications run in the cluster, this is required to build ecr repos"
+}

@@ -40,9 +40,14 @@ module "eks" {
 # map iam roles to eks cluster role. RBAC is applied using k8s_cluster_roles.tf config file and kubernetes provider
   map_roles = [
     {
-      rolearn = data.aws_iam_role.eks_ClusterRole.arn
+      rolearn = data.aws_iam_role.eks_read_ClusterRole.arn
       username = "reader"
       groups    = ["reader"]
+    },
+    {
+      rolearn = data.aws_iam_role.eks_admin_ClusterRole.arn
+      username = "admin"
+      groups    = ["admin"]
     }
   ]
 
