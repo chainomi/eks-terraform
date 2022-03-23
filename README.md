@@ -43,6 +43,13 @@ The add-ons to the eks cluster were installed using the Terraform helm provider
 7. view cluster roles - `kubectl get clusterroles`
 8. View cluster roles mapped to iam role - `kubectl edit configmap/aws-auth -n kube-system`
 
+## Deploy app with Helm chart
+1. Create chart - `cd` into folder you want chat on and enter - 
+`Test template to ensure its working - helm template app_chart --values ./app_chart/values-dev.yaml`
+2. `Install - helm install app-chart1 ../app/ci/app_chart/ --values ../app/ci/app_chart/values-dev.yaml`
+3. `Dry run - helm install app-chart1 ../app/ci/app_chart/ --values ../app/ci/app_chart/values-dev.yaml --dry-run`
+4. `view installed charts - helm list`
+
 ## Open app 
 1. Open the hostname entered in the app's ingress manifest or load balancer address if no hostname is specified in the ingress manifest `<hostname>/qod` or `<load balancer dns address>/qod`
 

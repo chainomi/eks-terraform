@@ -1,23 +1,23 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-ingress
+  name: {{ .Values.ingress.name }}
   annotations:
     kubernetes.io/ingress.class: alb
-    alb.ingress.kubernetes.io/load-balancer-name: app-service-alb
+    alb.ingress.kubernetes.io/load-balancer-name: {{ .Values.ingress.loadbalancername }}
     alb.ingress.kubernetes.io/scheme: internet-facing
-    external-dns.alpha.kubernetes.io/hostname: wordpress.chainomi.link
+    external-dns.alpha.kubernetes.io/hostname: {{ .Values.ingress.hostname }}
     # used by external_dns module to map the dns of alb to subdomain in route53
     alb.ingress.kubernetes.io/target-type: instance
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
     # alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Host":"wordpress.chainomi.link", "Port": "443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/actions.app-service: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Host":"wordpress.chainomi.link", "port":"443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-1:488144151286:certificate/6f5f9be2-98c8-4d81-a50f-b145d2ef9afb
+    #alb.ingress.kubernetes.io/certificate-arn: {{ .Values.ingress.certificateArn }}
     # Health Check Settings
     alb.ingress.kubernetes.io/healthcheck-path: /
     alb.ingress.kubernetes.io/healthcheck-interval-seconds: '15'
     alb.ingress.kubernetes.io/healthcheck-timeout-seconds: '5'
-    alb.ingress.kubernetes.io/success-codes: 200,302
+    alb.ingress.kubernetes.io/success-codes: {{ .Values.ingress.healthCheckSuccessCodes }}
     alb.ingress.kubernetes.io/healthy-threshold-count: '2'
     alb.ingress.kubernetes.io/unhealthy-threshold-count: '2'    
 spec:
@@ -28,6 +28,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: app-service
+              name: {{ .Values.ingress.serviceName }}
               port:
-                number: 8080
+                number: {{ .Values.ingress.servicePort }}

@@ -1,0 +1,91 @@
+# Default values for app_chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+
+app:
+  name: app
+  selectorLabels:
+    app: app
+    tier: frontend
+
+  service:
+    name: app-service
+    type: NodePort
+    port: 8080
+    targetPort: 8080
+    nodePort: 30005
+
+  deployment:
+    name: app-deployment
+    replicaCount: 1
+
+  containers:
+    name: app
+    image: 488144151286.dkr.ecr.us-west-1.amazonaws.com/app:latest
+    resource:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 500m
+        memory: 512Mi 
+    ports:
+      containerPort: 8080
+      name: app
+    env:
+      configMapRef: app-config
+
+redis:
+  name: redis
+  selectorLabels:
+    app: redis
+    tier: mem-cache
+
+  service:
+    name: redis-service
+    type: ClusterIP
+    port: 6379
+    targetPort: 6379
+    #nodePort: 30005
+
+  deployment:
+    name: redis-deployment
+    replicaCount: 1
+
+  containers:
+    name: redis
+    image: redis:alpine
+    # resource:
+    #   limits:
+    #     cpu: 500m
+    #     memory: 512Mi
+    #   requests:
+    #     cpu: 500m
+    #     memory: 512Mi 
+    ports:
+      containerPort: 6379
+      name: redis
+    # env:
+    #   configMapRef: {{ .app.name }}-config
+
+
+configMap:
+  app:
+    name: app-config
+    data:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+ingress:
+  name: app-ingress
+  loadbalancername: app-service-alb
+  hostname: wordpress.chainomi.link
+  #certificateArn: arn:aws:acm:us-west-1:488144151286:certificate/6f5f9be2-98c8-4d81-a50f-b145d2ef9afb
+  healthCheckSuccessCodes: 200,302
+  serviceName: app-service
+  servicePort: 8080
+
+
+

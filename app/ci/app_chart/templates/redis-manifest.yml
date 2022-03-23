@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redis.name }}
+spec:
+   type: {{ .Values.redis.service.type }} #used for internal services that will not be exposed
+   ports:
+   - port: {{ .Values.redis.service.port }}
+     targetPort: {{ .Values.redis.service.targetPort }}  #if not included it will assune port (service port) to be the same as targetPort (pod port)
+    #  nodePort: {{ .Values.redis.service.nodePort }} 
+   selector:
+    app: {{ .Values.redis.selectorLabels.app }} #this is used to bind this service to the deployment 
+    tier: {{ .Values.redis.selectorLabels.tier }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.deployment.name }}
+  labels:
+    app: {{ .Values.redis.selectorLabels.app }} 
+    tier: {{ .Values.redis.selectorLabels.tier }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.selectorLabels.app }} 
+      tier: {{ .Values.redis.selectorLabels.tier }}
+  replicas: {{ .Values.redis.deployment.replicaCount }}
+  template:
+    metadata:
+      name: {{ .Values.redis.name }}
+      labels:
+        app: {{ .Values.redis.selectorLabels.app }} 
+        tier: {{ .Values.redis.selectorLabels.tier }}
+    spec:
+      containers:
+        - name: {{ .Values.redis.containers.name }}
+          image: {{ .Values.redis.containers.image }}
+          ports:
+          - containerPort: {{ .Values.redis.containers.ports.containerPort }}
+            name: {{ .Values.redis.containers.ports.name }}

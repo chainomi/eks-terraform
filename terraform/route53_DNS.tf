@@ -11,7 +11,7 @@ module "external_dns" {
   settings = {
     "policy" = "sync" # Modify how DNS records are sychronized between sources and providers.
   }
-  depends_on = [module.cluster_autoscaler]
+ 
 }
 # Helm chart repo - https://artifacthub.io/packages/helm/bitnami/external-dns
 # Module repo - https://github.com/DNXLabs/terraform-aws-eks-external-dns
