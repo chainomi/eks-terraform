@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+spec:
+  type: NodePort #set to NodePort for ALB ingress
+  ports:
+   - port: 8080 # The port of the service
+     targetPort: 8080 # This is the actual port on which your application is running inside the container.
+     nodePort: 30005 # The port on the node it will recieve traffic from for the node has between 30000 - 32767
+  selector:
+    app: app #this is used to bind this service to the deployment (deployment-example.yml)
+    tier: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+  labels:
+    app: app 
+    tier: frontend
+spec:
+  selector:
+    matchLabels:
+      app: app 
+      tier: frontend
+  replicas: 1
+  template:
+    metadata:
+      name: app
+      labels:
+        app: app 
+        tier: frontend
+    spec:
+      containers:
+        - name: app
+          image: 116591313158.dkr.ecr.us-west-1.amazonaws.com/app:latest
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi  
+          ports:
+          - containerPort: 8080
+            name: app
+          envFrom:
+          - configMapRef:
+              name: app-config
+
