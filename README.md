@@ -43,6 +43,9 @@ The add-ons to the eks cluster were installed using the Terraform helm provider
 7. view cluster roles - `kubectl get clusterroles`
 8. View cluster roles mapped to iam role - `kubectl edit configmap/aws-auth -n kube-system`
 
+Fargate
+kubectl create namespace fargate-test
+kubectl apply -f ../app/ci/k8s/ -n fargate-test
 ## Deploy app with Helm chart
 1. Create chart - `cd` into folder you want chat on and enter - 
 `Test template to ensure its working - helm template app_chart --values ./app_chart/values-dev.yaml`

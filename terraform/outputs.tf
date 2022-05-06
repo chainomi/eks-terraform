@@ -69,3 +69,8 @@ output "repository_url_map" {
   value       = module.ecr.repository_url_map
   description = "Repository url map"
 }
+
+output "persistent_volume_ID" {
+  value = aws_ebs_volume.persistent_volume.id
+  description = "persistent volume id"
+}

@@ -6,12 +6,13 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/load-balancer-name: app-service-alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    external-dns.alpha.kubernetes.io/hostname: wordpress.chainomi.link
     # used by external_dns module to map the dns of alb to subdomain in route53
-    alb.ingress.kubernetes.io/target-type: instance
+    external-dns.alpha.kubernetes.io/hostname: wordpress.chainomi.link
+    # use ip target type for fargate profile and instance for node groups. ip target can also be used for node groups
+    alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}, {"HTTP":80}]'
-    # alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Host":"wordpress.chainomi.link", "Port": "443", "StatusCode": "HTTP_301"}}'
-    alb.ingress.kubernetes.io/actions.app-service: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Host":"wordpress.chainomi.link", "port":"443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    #alb.ingress.kubernetes.io/actions.app-service: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Host":"wordpress.chainomi.link", "port":"443", "StatusCode": "HTTP_301"}}'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-west-1:488144151286:certificate/6f5f9be2-98c8-4d81-a50f-b145d2ef9afb
     # Health Check Settings
     alb.ingress.kubernetes.io/healthcheck-path: /

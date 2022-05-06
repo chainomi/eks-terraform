@@ -42,3 +42,27 @@ variable "rbac_enabled" {
 variable "service_list" {
     description = "List of services or applications run in the cluster, this is required to build ecr repos"
 }
+
+
+# Datadog variables
+
+variable "datadog_enabled" {
+  type        = bool
+  default     = false
+  description = "Used to enable or disable access roles for cluster"
+}
+
+variable "datadog_api_key" {
+  type = string
+  description = "Datadog API Key"
+}
+
+variable "datadog_app_key" {
+  type = string
+  description = "Datadog Application Key"
+}
+
+variable "datadog_namespace" {
+  type = string
+  description = "namespace to install datadog agent on kubernetes"
+}

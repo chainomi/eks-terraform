@@ -12,6 +12,7 @@ resource "aws_security_group" "worker_group_mgmt_one" {
       "10.0.0.0/8",
     ]
   }
+  revoke_rules_on_delete = true
 }
 
 resource "aws_security_group" "worker_group_mgmt_two" {
@@ -27,6 +28,7 @@ resource "aws_security_group" "worker_group_mgmt_two" {
       "192.168.0.0/16",
     ]
   }
+  revoke_rules_on_delete = true
 }
 
 resource "aws_security_group" "all_worker_mgmt" {
@@ -44,4 +46,6 @@ resource "aws_security_group" "all_worker_mgmt" {
       "192.168.0.0/16",
     ]
   }
+  revoke_rules_on_delete = true
+
 }

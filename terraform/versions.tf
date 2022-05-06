@@ -29,6 +29,11 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = ">= 1.7.0"
     }
+
+    datadog = {
+      source = "DataDog/datadog"
+    }
+  
   }
 
   required_version = ">= 0.14"

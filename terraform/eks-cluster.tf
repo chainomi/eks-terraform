@@ -5,6 +5,7 @@ module "eks" {
   cluster_version = "1.21"
   subnets         = module.vpc.private_subnets
   enable_irsa     = true
+  # cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
   vpc_id = module.vpc.vpc_id
 
@@ -37,6 +38,25 @@ module "eks" {
     }
   ]
 
+    # Fargate Profile(s)
+ fargate_profiles = {
+    default = {
+      name = "your-alb-sample-app"
+      selectors = [
+        {
+          namespace = "game-2048"
+        }
+      ]
+    }
+  }
+
+  tags = {
+    Environment = "dev"
+    Terraform   = "true"
+  }
+
+
+
 # map iam roles to eks cluster role. RBAC is applied using k8s_cluster_roles.tf config file and kubernetes provider
   map_roles = [
     {
@@ -51,6 +71,7 @@ module "eks" {
     }
   ]
 
+  
 
 }
 
@@ -75,6 +96,7 @@ module "load_balancer_controller" {
   #chart information https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
   
 }
+
 
 module "cluster_autoscaler" {
   source = "git::https://github.com/DNXLabs/terraform-aws-eks-cluster-autoscaler.git"
@@ -111,3 +133,19 @@ resource "helm_release" "metrics_server" {
 
   
 }
+
+#enable cloudwatch logs using fluentbit helm chart to publish to cloudwatch log group
+# module "cloudwatch_logs" {
+#   source = "git::https://github.com/DNXLabs/terraform-aws-eks-cloudwatch-logs.git"
+
+#   enabled = true
+
+#   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+#   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+#   cluster_name                     = module.eks.cluster_id
+#   worker_iam_role_name             = module.eks.worker_iam_role_name
+#   region                           = var.region
+#   helm_chart_version               = "0.1.7"
+
+  ## Repo https://artifacthub.io/packages/helm/aws/aws-for-fluent-bit
+# }

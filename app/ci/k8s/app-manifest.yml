@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: app-service
 spec:
-  type: NodePort #set to NodePort for ALB ingress
+  type: ClusterIP #set to NodePort for ALB ingress using instance target type and ClusterIP for ALB ingress using ip target type
   ports:
    - port: 8080 # The port of the service
      targetPort: 8080 # This is the actual port on which your application is running inside the container.
-     nodePort: 30005 # The port on the node it will recieve traffic from for the node has between 30000 - 32767
+     #nodePort: 30005 # The port on the node it will recieve traffic from for the node has between 30000 - 32767
   selector:
     app: app #this is used to bind this service to the deployment (deployment-example.yml)
     tier: frontend

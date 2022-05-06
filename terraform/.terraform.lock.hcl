@@ -1,6 +1,26 @@
 # This file is maintained automatically by "terraform init".
 # Manual edits may be lost in future updates.
 
+provider "registry.terraform.io/datadog/datadog" {
+  version = "3.11.0"
+  hashes = [
+    "h1:bGv7ZvDfE7knOL8QLXGucw0c8rhkQuVKjveT9J6oJ20=",
+    "zh:0860157f457a0bc1156e5585e9cee4e8e9c9aa4440af859186efc4774060811b",
+    "zh:0875b65034d99390927e434081e3c53f0d5ac8a44926dd141f36f9809497bb8f",
+    "zh:0ce7cfe417204567b3342ad769808350c798152614790b27916375195b71f430",
+    "zh:1dfedff92eb5629282df73bc54426931252a53b79ee1368a14fa416742126fa6",
+    "zh:3e19a72a0e6fb7363ac509e2c04788bfed696a245359611a17eb946006f73574",
+    "zh:410f34df69ce5b77cb1d65a96ac7ff5f823bcce8d404b6d27d74961c17cefaac",
+    "zh:70356e99c999e0906084ca8a3284a541bcf177517bd03469d81aecb7bb1ae007",
+    "zh:959a26930883e9940662b8a248c813bb3e1762f4b7d2cbb14be7311d163ed459",
+    "zh:b70bbee6c905453972a42b0b990b7f750f886d7b5058251538ddd004c2161196",
+    "zh:b721156a932030c3caae6193b0c95988fb64d194f858b5769ba62a913169a569",
+    "zh:c34ac763c7416fd2fd6ad429ec9decdde7dc973218e9c6ea4daefadc103a3421",
+    "zh:eb38304fe14a50a1153e4e6c0efcd7ed51285afad03cff122c3efd1a3d35e045",
+    "zh:f636e12936cbd0c39934b7715637ead797ae8da2f4226a6a637431d1ded0a80b",
+  ]
+}
+
 provider "registry.terraform.io/gavinbunney/kubectl" {
   version     = "1.13.1"
   constraints = ">= 1.7.0"
