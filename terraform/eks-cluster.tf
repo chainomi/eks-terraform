@@ -9,6 +9,12 @@ module "eks" {
 
   vpc_id = module.vpc.vpc_id
 
+  #IAM
+  # workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess"]
+  cluster_iam_role_name = "eks-${var.application_name}-${var.environment}-cluster-role"
+  workers_role_name = "eks-${var.application_name}-${var.environment}-worker-node-role"
+  workers_additional_policies = ["${aws_iam_policy.additional_node_policy.arn}"]
+
   workers_group_defaults = {
     root_volume_type = "gp2"
   }
@@ -23,6 +29,9 @@ module "eks" {
       asg_min_size                  = var.minimum_nodes
       asg_max_size                  = var.maximum_nodes
       
+      
+
+
       #additional tags to enable cluster auto scaler on worker nodes
       tags = [{
         key                 = "k8s.io/cluster-autoscaler/enabled"

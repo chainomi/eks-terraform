@@ -2,7 +2,7 @@
 #namespace to install data dog
 
 resource "kubernetes_namespace" "datadog" {
-count = var.datadog_enabled ? 1 : 0
+# count = var.datadog_enabled ? 1 : 0
   metadata {
     name = var.datadog_namespace
   }
@@ -10,7 +10,7 @@ count = var.datadog_enabled ? 1 : 0
 
 #helm chart for datadog agent
 resource "helm_release" "datadog_agent" {
-count = var.datadog_enabled ? 1 : 0
+# count = var.datadog_enabled ? 1 : 0
 
   name       = "datadog-agent"
   chart      = "datadog"
@@ -95,7 +95,7 @@ provider "datadog" {
 }
 
 resource "datadog_monitor" "app" {
-count = var.datadog_enabled ? 1 : 0
+# count = var.datadog_enabled ? 1 : 0
   name               = "Kubernetes Pod Health"
   type               = "metric alert"
   message            = "Kubernetes Pods are not in an optimal health state. Notify: @operator"
@@ -118,7 +118,7 @@ count = var.datadog_enabled ? 1 : 0
 
 #health check
 resource "datadog_synthetics_test" "app" {
-count = var.datadog_enabled ? 1 : 0
+# count = var.datadog_enabled ? 1 : 0
   type    = "api"
   subtype = "http"
 
@@ -149,7 +149,6 @@ count = var.datadog_enabled ? 1 : 0
 }
 
 
-
 resource "datadog_dashboard" "app" {
   title        = "app service dashboard"
   description  = "A Datadog Dashboard for the app deployment"
@@ -167,7 +166,7 @@ resource "datadog_dashboard" "app" {
       request {
         fill {
             #enter full image name under as value for image_name
-          q = "avg:process.stat.container.cpu.total_pct{image_name:488144151286.dkr.ecr.us-west-1.amazonaws.com/app:latest} by {host}"
+          q = "avg:process.stat.container.cpu.total_pct{short_image:app} by {host}"
         }
       }
 
@@ -186,7 +185,7 @@ resource "datadog_dashboard" "app" {
       request {
         display_type = "line"
         #enter full image name under as value for image_name
-        q            = "top(avg:docker.cpu.usage{image_name:488144151286.dkr.ecr.us-west-1.amazonaws.com/app:latest} by {docker_image,container_id}, 10, 'mean', 'desc')"
+        q            = "top(avg:docker.cpu.usage{short_image:app} by {docker_image,container_id}, 10, 'mean', 'desc')"
 
         style {
           line_type  = "solid"
@@ -206,7 +205,7 @@ resource "datadog_dashboard" "app" {
 
   widget {
     alert_graph_definition {
-      alert_id = datadog_monitor.app[count.index]
+      alert_id = datadog_monitor.app.id
       title    = "Kubernetes Node CPU"
       viz_type = "timeseries"
     }
@@ -239,7 +238,7 @@ resource "datadog_dashboard" "app" {
       request {
         display_type = "line"
         #enter full image name under as value for image_name
-        q            = "top(avg:docker.mem.in_use{image_name:488144151286.dkr.ecr.us-west-1.amazonaws.com/app:latest} by {container_name}, 10, 'mean', 'desc')"
+        q            = "top(avg:docker.mem.in_use{short_image:app} by {container_name}, 10, 'mean', 'desc')"
 
         style {
           line_type  = "solid"
