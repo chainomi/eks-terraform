@@ -9,6 +9,5 @@ maximum_nodes = 7
 admin_access_role_name = "administrator_role"
 read_access_role_name = "developer_role"
 
-datadog_api_key = ""
-datadog_app_key = ""
+datadog_secret_manager_arn = "arn:aws:secretsmanager:us-west-1:488144151286:secret:datadog_secret-NfzyMs"
 datadog_namespace = "data-dog"

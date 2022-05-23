@@ -52,17 +52,22 @@ variable "datadog_enabled" {
   description = "Used to enable or disable access roles for cluster"
 }
 
-variable "datadog_api_key" {
-  type = string
-  description = "Datadog API Key"
-}
+# variable "datadog_api_key" {
+#   type = string
+#   description = "Datadog API Key"
+# }
 
-variable "datadog_app_key" {
-  type = string
-  description = "Datadog Application Key"
-}
+# variable "datadog_app_key" {
+#   type = string
+#   description = "Datadog Application Key"
+# }
 
 variable "datadog_namespace" {
   type = string
   description = "namespace to install datadog agent on kubernetes"
+}
+
+variable "datadog_secret_manager_arn" {
+  type = string
+  description = "arn of datadog secrets (api and app keys) in secrets manager"
 }

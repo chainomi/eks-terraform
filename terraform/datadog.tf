@@ -1,6 +1,16 @@
+#retrieve keys from secret manager
+
+data "aws_secretsmanager_secret" "datadog_secrets" {
+  arn = var.datadog_secret_manager_arn
+}
+
+#retrieve current version of secret
+
+data "aws_secretsmanager_secret_version" "current" {
+  secret_id = data.aws_secretsmanager_secret.datadog_secrets.id
+}
 
 #namespace to install data dog
-
 resource "kubernetes_namespace" "datadog" {
 # count = var.datadog_enabled ? 1 : 0
   metadata {
@@ -22,7 +32,9 @@ resource "helm_release" "datadog_agent" {
 
   set_sensitive {
     name  = "datadog.apiKey"
-    value = var.datadog_api_key
+    # value = var.datadog_api_key
+    value = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["datadog_api_key"]
+
   }
 
   set {
@@ -90,8 +102,10 @@ resource "helm_release" "datadog_agent" {
 
 
 provider "datadog" {
-  api_key = var.datadog_api_key
-  app_key = var.datadog_app_key
+  # api_key = var.datadog_api_key
+  # app_key = var.datadog_app_key
+  api_key = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["datadog_api_key"]
+  app_key = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["datadog_app_key"]
 }
 
 resource "datadog_monitor" "app" {

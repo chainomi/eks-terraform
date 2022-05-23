@@ -74,3 +74,7 @@ output "persistent_volume_ID" {
   value = aws_ebs_volume.persistent_volume.id
   description = "persistent volume id"
 }
+
+output "datadog_secret_ID" {
+  value = data.aws_secretsmanager_secret.datadog_secrets.id
+}
