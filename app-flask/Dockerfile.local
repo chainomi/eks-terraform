@@ -1,0 +1,37 @@
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+# Start from python:3.8-alpine base image
+FROM python:3.8-alpine
+
+
+ENV KUBECONFIG=/app_flask/kube/config
+
+# The latest alpine images don't have some tools like (`git` and `bash`).
+# Adding git, bash and openssh to the image
+RUN apk update && apk upgrade && \
+    apk add --no-cache bash git openssh
+
+# Make dir app
+RUN mkdir /app_flask
+RUN mkdir /app_flask/kube
+
+WORKDIR /app_flask
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
+
+#install modules
+RUN pip install -r requirements.txt
+
+RUN adduser -D flaskuser
+# RUN mkdir /home/flaskuser/.kube/
+# Expose port 8000 to the outside world
+EXPOSE 8000
+
+RUN chown -R flaskuser /app_flask
+#RUN chown -R flaskuser /app_flask/kube/config
+USER flaskuser
+
+
+# Run the executable
+CMD ["python", "app_local.py"]

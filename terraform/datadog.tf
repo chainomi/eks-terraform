@@ -12,7 +12,7 @@ data "aws_secretsmanager_secret_version" "current" {
 
 #namespace to install data dog
 resource "kubernetes_namespace" "datadog" {
-# count = var.datadog_enabled ? 1 : 0
+count = var.datadog_enabled ? 1 : 0
   metadata {
     name = var.datadog_namespace
   }
@@ -20,7 +20,7 @@ resource "kubernetes_namespace" "datadog" {
 
 #helm chart for datadog agent
 resource "helm_release" "datadog_agent" {
-# count = var.datadog_enabled ? 1 : 0
+count = var.datadog_enabled ? 1 : 0
 
   name       = "datadog-agent"
   chart      = "datadog"
@@ -109,19 +109,25 @@ provider "datadog" {
 }
 
 resource "datadog_monitor" "app" {
-# count = var.datadog_enabled ? 1 : 0
-  name               = "Kubernetes Pod Health"
+count = var.datadog_enabled ? 1 : 0
+  name               = "App Pod Health"
   type               = "metric alert"
-  message            = "Kubernetes Pods are not in an optimal health state. Notify: @operator"
+  message            = "Kubernetes Pods are not in an optimal health state. Notify: @operator @chainomi.gmail.com"
   escalation_message = "Please investigate the Kubernetes Pods, @operator"
 
 # add the name of the image example below was for an image called "app"
-  query = "max(last_1m):sum:docker.containers.running{short_image:app} <= 1"
+# we are setting an alert when the max number of containers running image "app" is less than zero
+# zero is the alert threshold
+  query = "max(last_1m):sum:docker.containers.running{short_image:app} <= 0"
 
+#monitor threshold notes, 
+#ok is the value for healthy
+# warning is used when close to the alert threshold
+# critical is used when the pods go to zero and triggers and alert
   monitor_thresholds {
-    ok       = 3
-    warning  = 2
-    critical = 1
+    ok       = 1
+    warning  = 0.5
+    critical = 0
   }
 
   notify_no_data = true
@@ -132,7 +138,7 @@ resource "datadog_monitor" "app" {
 
 #health check
 resource "datadog_synthetics_test" "app" {
-# count = var.datadog_enabled ? 1 : 0
+count = var.datadog_enabled ? 1 : 0
   type    = "api"
   subtype = "http"
 
@@ -164,6 +170,8 @@ resource "datadog_synthetics_test" "app" {
 
 
 resource "datadog_dashboard" "app" {
+count = var.datadog_enabled ? 1 : 0
+
   title        = "app service dashboard"
   description  = "A Datadog Dashboard for the app deployment"
   layout_type  = "ordered"
@@ -219,7 +227,8 @@ resource "datadog_dashboard" "app" {
 
   widget {
     alert_graph_definition {
-      alert_id = datadog_monitor.app.id
+      # alert_id = datadog_monitor.app.id
+      alert_id = datadog_monitor.app[count.index].id 
       title    = "Kubernetes Node CPU"
       viz_type = "timeseries"
     }

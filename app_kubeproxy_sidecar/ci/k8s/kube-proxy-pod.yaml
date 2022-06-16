@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kube-proxy-demo
+spec:
+  containers:
+  - name: sise-1
+    image: mhausenblas/simpleservice:0.5.0
+    ports:
+    - containerPort: 9876
+  - name: kubectl-sidecar
+    image: bitnami/kubectl:1.24
+    command: ["kubectl"]
+    args: ["proxy"]
+    ports:
+        - containerPort: 8081

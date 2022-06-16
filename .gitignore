@@ -33,3 +33,5 @@ override.tf.json
 
 #kube config
 kubeconfig*
+
+app-flask/env/

@@ -144,17 +144,17 @@ resource "helm_release" "metrics_server" {
 }
 
 #enable cloudwatch logs using fluentbit helm chart to publish to cloudwatch log group
-module "cloudwatch_logs" {
-  source = "git::https://github.com/DNXLabs/terraform-aws-eks-cloudwatch-logs.git"
+# module "cloudwatch_logs" {
+#   source = "git::https://github.com/DNXLabs/terraform-aws-eks-cloudwatch-logs.git"
 
-  enabled = true
+#   enabled = true
 
-  cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
-  cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
-  cluster_name                     = module.eks.cluster_id
-  worker_iam_role_name             = module.eks.worker_iam_role_name
-  region                           = var.region
-  helm_chart_version               = "0.1.7"
+#   cluster_identity_oidc_issuer     = module.eks.cluster_oidc_issuer_url
+#   cluster_identity_oidc_issuer_arn = module.eks.oidc_provider_arn
+#   cluster_name                     = module.eks.cluster_id
+#   worker_iam_role_name             = module.eks.worker_iam_role_name
+#   region                           = var.region
+#   helm_chart_version               = "0.1.7"
 
-  # Repo https://artifacthub.io/packages/helm/aws/aws-for-fluent-bit
-}
+#   # Repo https://artifacthub.io/packages/helm/aws/aws-for-fluent-bit
+# }

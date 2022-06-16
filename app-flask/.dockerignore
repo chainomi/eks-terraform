@@ -1,0 +1,26 @@
+# ignore .git and .cache folders
+.git
+.cache
+
+# ignore all markdown files (md) beside all README*.md other than README-secret.md
+*.md
+*.MD
+!README*.md
+README-secret.md
+Readme**
+
+#local python script
+#app_local.py
+
+#kubernetes folders
+ci/**/*
+ci/
+
+#Dockerfiles
+Dockerfile**
+
+#Docker compose files
+docker-compose**
+
+#python modules
+env/

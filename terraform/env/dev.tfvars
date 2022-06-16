@@ -1,7 +1,7 @@
 region = "us-west-1"
 environment ="dev"
 application_name = "Word-press"
-service_list = ["app"]
+service_list = ["app", "flask-api"]
 node_instance_type ="t2.small"
 minimum_nodes = 2
 desired_nodes = 2
