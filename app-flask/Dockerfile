@@ -19,4 +19,4 @@ EXPOSE 8000
 
 
 # Run the executable
-CMD ["python", "app_cloud.py"]
+CMD ["python", "app_flask_api.py"]

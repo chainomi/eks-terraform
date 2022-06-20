@@ -9,7 +9,8 @@ ENV KUBECONFIG=/app_flask/kube/config
 # The latest alpine images don't have some tools like (`git` and `bash`).
 # Adding git, bash and openssh to the image
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+    apk add --no-cache bash git openssh && \
+    apk add sudo
 
 # Make dir app
 RUN mkdir /app_flask
@@ -23,7 +24,9 @@ COPY . .
 #install modules
 RUN pip install -r requirements.txt
 
-RUN adduser -D flaskuser
+RUN adduser --disabled-password --gecos '' flaskuser
+RUN adduser -D flaskuser sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 # RUN mkdir /home/flaskuser/.kube/
 # Expose port 8000 to the outside world
 EXPOSE 8000
@@ -32,6 +35,9 @@ RUN chown -R flaskuser /app_flask
 #RUN chown -R flaskuser /app_flask/kube/config
 USER flaskuser
 
+RUN sudo apk add --no-cache aws-cli 
+
+#RUN apk add --no-cache aws-cli
 
 # Run the executable
 CMD ["python", "app_local.py"]

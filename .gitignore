@@ -35,3 +35,8 @@ override.tf.json
 kubeconfig*
 
 app-flask/env/
+
+app-flask/app_cloud.py
+app-flask/app_local.py
+app-flask/Dockerfile.local
+app-flask/docker-compose.yml
