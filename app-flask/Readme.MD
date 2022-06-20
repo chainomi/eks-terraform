@@ -8,7 +8,7 @@ This application was written to show how kubernetes resources can be created and
 > 1. AWS CLI
 > 2. Kubectl
 > 3. Python
-> 4. Pip
+> 4. pip
 > 5. Docker
 
 
@@ -17,7 +17,17 @@ This application was written to show how kubernetes resources can be created and
 ## Running application locally
 
 ### Kube config setup
-The application will require access to an kubernetes (EKS) cluster where resources will be deployed and updated. Access to EKS cluster is typically granted using the aws cli and the kubeconfig file. 
+>The application will require access to an kubernetes (EKS) cluster where resources will be deployed and updated. Access to EKS cluster is typically granted using the aws cli and the kubeconfig file. 
+
+>The application is setup to automatically switch between using kubeconfig to authenticate with the kubernetes api when running locally and using the cluster config with permissions from a service account and role binding (RBAC) when running in an eks cluster. The code below is an example of the logic used to make this switch. It can be found in the python file `app_flask_api.py`
+
+    ```
+    if (os.getenv("KUBERNETES_SERVICE_HOST") is not None):
+    config.load_incluster_config()
+    
+    else:
+        config.load_kube_config()
+    ```    
 
 >1. Ensure kubectl is installed on machine.
 >2. Update kubeconfig context to EKS cluster where resources will be deployed and updated using command - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
