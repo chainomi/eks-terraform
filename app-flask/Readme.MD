@@ -1,7 +1,7 @@
 # Flask app using Kubernetes client library for Python
 
 ## Introduction
-This application was written to show how kubernetes resources can be created and updated programmatically using the kubernetes client library in python. For demo purposes the application uses a flask webserver, which recieves a json payload to trigger python functions using the kubernetes library which communicates with the kubernetes API on a cluster for resource creation and updates.
+This application was written to show how kubernetes resources can be created and updated programmatically using the kubernetes client library in python. For demo purposes the application uses a flask webserver, which recieves a json payload to trigger python functions using the kubernetes library which communicates with the kubernetes API on a cluster for resource creation and updates. 
 
 
 ## Requirements
@@ -47,9 +47,10 @@ Use the following commands to run the application using python
 4. Push image to ECR - `docker push <aws_ecr_repository_url>:latest`
 
 ## Updating manifest files
-1. Update hostname in `ingress.yml` to the desired hostname.
-2. Update the container image in the app-manifest file to the ecr image uri.
-3. 
+1. Update hostname in `ci/k8s/ingress.yml` to the desired hostname.
+2. Update the SSL certificate for domain in `ci/k8s/ingress.yml`.
+3. Update the container image in the `ci/k8s/app-manifest.yml` file to the ECR image URL.
+   
 
 ### Deploy app to EKS cluster 
 1. Change kubeconfig context to eks cluster - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
@@ -57,11 +58,12 @@ Use the following commands to run the application using python
 
 
 ## Testing
-Perform the following below 
+Perform the following below to test the application locally and in the cloud.
 
-### Create resources
-1. Deploy and create flask api in kubernetes cluster 
-2. For demo we will create an nginx deployment 
+### Notes
+1. Local testing (using python file) - replace <hostname> with localhost.
+2. Cloud testing (using deployed containerized app) - replace <hostname> with cloud hostname.
+3. For demo we will create an nginx deployment 
 
 ### Create and update config map
 1. Create config map with values in json payload.
