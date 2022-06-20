@@ -16,7 +16,7 @@ This application was written to show how kubernetes resources can be created and
 
 ## Running application locally
 
-### kube config setup
+### Kube config setup
 The application will require access to an kubernetes (EKS) cluster where resources will be deployed and updated. Access to EKS cluster is typically granted using the aws cli and the kubeconfig file. 
 
 1. Ensure kubectl is installed on machine.
@@ -25,12 +25,12 @@ The application will require access to an kubernetes (EKS) cluster where resourc
 ### Starting application 
 Use the following commands to run the application using python
 
-> Setup virtual environment - `python3 -m venv env`
-> Activate virtual environment in env folder - `source env/bin/activate`
-> Check python version and folder where dependencies will be run from - `which python`
-> Install dependencies - `pip install -r requirements.txt`
-> Run application - `python3 app_flask_api.py`
-> Confirm application is running `http://localhost:8000/`
+> 1. Setup virtual environment - `python3 -m venv env`
+> 2. Activate virtual environment in env folder - `source env/bin/activate`
+> 3. Check python version and folder where dependencies will be run from - `which python`
+> 4. Install dependencies - `pip install -r requirements.txt`
+> 5. Run application - `python3 app_flask_api.py`
+> 6. Confirm application is running `http://localhost:8000/`
 
 
 ## Running application in the cloud (AWS)
@@ -63,8 +63,8 @@ Perform the following below
 1. Deploy and create flask api in kubernetes cluster 
 2. For demo we will create an nginx deployment 
 
-### create and update config map
-    create config map with values in json payload.
+### Create and update config map
+1. Create config map with values in json payload.
    
         ```
         curl --location --request POST 'https://<hostname>/create_map' \
@@ -74,9 +74,9 @@ Perform the following below
             "redis_host" : "redux_1234.com",
             "redis_port" : "8080"
         }'
-       ```
+        ```
     
-   update config map with values in json payload.
+2. Update config map with values in json payload.
    
         ```
         curl --location --request POST 'https://<hostname>/create_map' \
@@ -86,12 +86,13 @@ Perform the following below
             "redis_host" : "redux_1235.com",
             "redis_port" : "8084"
         }'
-       ```
+        ```
 
 ### Update and restart deployment
-   update config map and restart a deployment with configmap
+1. Update config map and restart a deployment with configmap
+   
         ```
-        curl --location --request POST 'https://hostname/update_map_restart_deployment' \
+        curl --location --request POST 'https://<hostname>/update_map_restart_deployment' \
         --header 'Content-Type: application/json' \
         --data-raw '{
             "deployment_name" : "nginx-deployment",
@@ -99,7 +100,7 @@ Perform the following below
             "redis_host" : "redux_1236.com",
             "redis_port" : "8085"
         }'
-       ```
+        ```
 
 
 ## References
