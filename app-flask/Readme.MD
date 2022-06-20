@@ -5,11 +5,11 @@ This application was written to show how kubernetes resources can be created and
 
 
 ## Requirements
-1. AWS CLI
-2. Kubectl
-3. Python
-4. Pip
-5. Docker
+> 1. AWS CLI
+> 2. Kubectl
+> 3. Python
+> 4. Pip
+> 5. Docker
 
 
 ## Instructions
@@ -19,10 +19,10 @@ This application was written to show how kubernetes resources can be created and
 ### Kube config setup
 The application will require access to an kubernetes (EKS) cluster where resources will be deployed and updated. Access to EKS cluster is typically granted using the aws cli and the kubeconfig file. 
 
-1. Ensure kubectl is installed on machine.
-2. Update kubeconfig context to EKS cluster where resources will be deployed and updated using command - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
+>1. Ensure kubectl is installed on machine.
+>2. Update kubeconfig context to EKS cluster where resources will be deployed and updated using command - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
 
-### Starting application 
+### Starting the application 
 Use the following commands to run the application using python
 
 > 1. Setup virtual environment - `python3 -m venv env`
@@ -38,35 +38,35 @@ Use the following commands to run the application using python
 ## Cloud deployment (AWS EKS)
 
 ### Docker image build
-1. `docker build -t flask-api .`
+> 1. `docker build -t flask-api .`
 
 ### ECR - push image to ECR (from Terraform folder)
-1. Create repo in AWS ECR named `flask-api`.
-2. login to ECR - `aws ecr get-login-password --region <aws_region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<aws_region>.amazonaws.com`
-3. Tag image for ECR - `docker tag flask-api:latest <aws_ecr_repository_url>:latest`
-4. Push image to ECR - `docker push <aws_ecr_repository_url>:latest`
+> 1. Create repo in AWS ECR named `flask-api`.
+> 2. login to ECR - `aws ecr get-login-password --region <aws_region> | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.<aws_region>.amazonaws.com`
+> 3. Tag image for ECR - `docker tag flask-api:latest <aws_ecr_repository_url>:latest`
+> 4. Push image to ECR - `docker push <aws_ecr_repository_url>:latest`
 
 ## Updating manifest files
-1. Update hostname in `ci/k8s/ingress.yml` to the desired hostname.
-2. Update the SSL certificate for domain in `ci/k8s/ingress.yml`.
-3. Update the container image in the `ci/k8s/app-manifest.yml` file to the ECR image URL.
+> 1. Update hostname in `ci/k8s/ingress.yml` to the desired hostname.
+> 2. Update the SSL certificate for domain in `ci/k8s/ingress.yml`.
+> 3. Update the container image in the `ci/k8s/app-manifest.yml` file to the ECR image URL.
    
 
 ### Deploy app to EKS cluster 
-1. Change kubeconfig context to eks cluster - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
-2. create kubernetes resources - `kubectl apply -f ci/k8s/`
+> 1. Change kubeconfig context to eks cluster - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
+> 2. create kubernetes resources - `kubectl apply -f ci/k8s/`
 
 
 ## Testing
 Perform the following below to test the application locally and in the cloud.
 
 ### Notes
-1. Local testing (using python file) - replace <hostname> with localhost.
-2. Cloud testing (using deployed containerized app) - replace <hostname> with cloud hostname.
-3. For demo we will create an nginx deployment 
+> 1. Local testing (using python file) - replace <hostname> with localhost.
+> 2. Cloud testing (using deployed containerized app) - replace <hostname> with cloud hostname.
+> 3. For demo we will create an nginx deployment 
 
 ### Create and update config map
-1. Create config map with values in json payload.
+> 1. Create config map with values in json payload.
    
         ```
         curl --location --request POST 'https://<hostname>/create_map' \
@@ -78,7 +78,7 @@ Perform the following below to test the application locally and in the cloud.
         }'
         ```
     
-2. Update config map with values in json payload.
+> 2. Update config map with values in json payload.
    
         ```
         curl --location --request POST 'https://<hostname>/create_map' \
@@ -91,7 +91,7 @@ Perform the following below to test the application locally and in the cloud.
         ```
 
 ### Update and restart deployment
-1. Update config map and restart a deployment with configmap
+> 1. Update config map and restart a deployment with configmap
    
         ```
         curl --location --request POST 'https://<hostname>/update_map_restart_deployment' \
