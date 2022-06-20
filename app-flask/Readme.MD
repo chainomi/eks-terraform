@@ -95,7 +95,7 @@ Perform the following below to test the application locally and in the cloud.
 > 2. Update config map with values in json payload.
    
         ```
-        curl --location --request POST 'https://<hostname>/create_map' \
+        curl --location --request POST 'https://<hostname>/update_map' \
         --header 'Content-Type: application/json' \
         --data-raw '{
             "configmap_name" : "test-configmap",
