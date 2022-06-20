@@ -29,11 +29,11 @@ This application was written to show how kubernetes resources can be created and
         config.load_kube_config()
     ```    
    > a. `config.load_kube_config()` uses the local kubeconfig file to authenticate with the kubernetes api in an eks cluster.
-   
+
    > b. `config.load_incluster_config()` uses role based access set on the pod to authenticate with the kubernetes api in an eks cluster.
    
 
->1. Ensure kubectl is installed on machine.
+>1. Ensure kubectl and AWS CLI are both installed on machine.
 >2. Update kubeconfig context to EKS cluster where resources will be deployed and updated using command - `aws eks --region <aws_region> update-kubeconfig --name <cluster_name>`
 
 ### Starting the application 
