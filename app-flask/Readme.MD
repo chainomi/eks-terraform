@@ -117,6 +117,45 @@ Perform the following below to test the application locally and in the cloud.
             "redis_port" : "8085"
         }'
         ```
+### Create deployment
+>1. Create a deployment
+        ```
+        curl --location --request POST 'https://<hostname>/create_deployment' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "deployment_name" : "java-deployment",
+            "command" : "java",
+            "args" : "-version"
+        }'
+        ```
+>2. Update a deployment. Lets change the args to show the help menu in the java container 
+        ```
+        curl --location --request POST ''https://<hostname>/update_deployment' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "deployment_name" : "java-deployment",
+            "command" : "java",
+            "args" : "-help"
+        }'
+        ```
+>3. Update and restart a deployment. Lets change the args to show the version menu in the java container 
+        ```
+        curl --location --request POST ''https://<hostname>/update_and_restart_deployment' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "deployment_name" : "java-deployment",
+            "command" : "java",
+            "args" : "-showversion"
+        }'
+        ```
+>4. Delete a deployment. 
+        ```
+        curl --location --request POST ''https://<hostname>/delete_deployment' \
+        --header 'Content-Type: application/json' \
+        --data-raw '{
+            "deployment_name" : "java-deployment"
+        }'
+        ```
 
 
 ## References

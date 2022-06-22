@@ -276,6 +276,270 @@ def update_map_restart_deployment():
     
     return f"\n[INFO] configmap {configmap_name} updated and deployment {deployment} restarted \n"
 
+@app.route("/create_deployment", methods=['POST'])
+def create_deployment():
+
+    # Creating a dynamic client
+    if (os.getenv("KUBERNETES_SERVICE_HOST") is not None):
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_incluster_config())
+        )    
+    else:
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_kube_config())
+        ) 
+
+
+    # fetching the deployment api
+    api = client.resources.get(api_version="apps/v1", kind="Deployment")
+    
+    request_data = request.get_json()
+
+    deployment_name = request_data['deployment_name']
+    command = request_data['command']
+    argument = request_data['args']
+
+    deployment_manifest = {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "name": deployment_name,
+                "labels": {
+                "app": "java"
+                }
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                "matchLabels": {
+                    "app": "java"
+                }
+                },
+                "template": {
+                "metadata": {
+                    "labels": {
+                    "app": "java"
+                    }
+                },
+                "spec": {
+                    "containers": [
+                    {
+                        "name": "java11",
+                        "image": "openjdk:11",
+                        "command": [command],
+                        "args": [argument]
+                    }
+                 ]
+                }
+            }
+         }
+    }
+
+    deployment = api.create(body=deployment_manifest, namespace="default")
+
+    print(deployment)
+    print(f"\n[INFO] deployment {deployment_name} created\n")
+    return f"\n[INFO] deployment {deployment_name} created\n"
+
+
+@app.route("/update_deployment", methods=['POST'])
+def update_deployment():
+    
+    # Creating a dynamic client
+    if (os.getenv("KUBERNETES_SERVICE_HOST") is not None):
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_incluster_config())
+        )    
+    else:
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_kube_config())
+        ) 
+
+    # fetching the deployment api
+    api = client.resources.get(api_version="apps/v1", kind="Deployment")
+    
+    request_data = request.get_json()
+
+    deployment_name = request_data['deployment_name']
+    command = request_data['command']
+    argument = request_data['args']
+
+    deployment_manifest = {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "name": deployment_name,
+                "labels": {
+                "app": "java"
+                }
+            },
+            "spec": {
+                "replicas": 1,
+                "selector": {
+                "matchLabels": {
+                    "app": "java"
+                }
+                },
+                "template": {
+                "metadata": {
+                    "labels": {
+                    "app": "java"
+                    }
+                },
+                "spec": {
+                    "containers": [
+                    {
+                        "name": "java11",
+                        "image": "openjdk:11",
+                        "command": [command],
+                        "args": [argument]
+                    }
+                 ]
+                }
+            }
+         }
+    }
+
+    deployment_patched = api.patch(
+    body=deployment_manifest, name=deployment_name, namespace="default"
+    )
+
+    print(deployment_patched)
+    print(f"\n[INFO] deployment {deployment_name} updated\n")
+    return f"\n[INFO] deployment {deployment_name} updated\n"
+
+
+
+@app.route("/delete_deployment", methods=['POST'])
+def delete_deployment():
+    
+    # Creating a dynamic client
+    if (os.getenv("KUBERNETES_SERVICE_HOST") is not None):
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_incluster_config())
+        )    
+    else:
+        client = dynamic.DynamicClient(
+            api_client.ApiClient(configuration=config.load_kube_config())
+        ) 
+
+    # fetching the deployment api
+    api = client.resources.get(api_version="apps/v1", kind="Deployment")
+
+    request_data = request.get_json()
+
+    deployment_name = request_data['deployment_name']
+    
+    deployment_deleted = api.delete(name=deployment_name, body={}, namespace="default")
+
+    print(f"\n[INFO] deployment {deployment_name} deleted\n")
+    return f"\n[INFO] deployment {deployment_name} deleted\n"
+
+@app.route("/update_and_restart_deployment", methods=['POST'])
+def update_and_restart_deployment():
+        
+    request_data = request.get_json()
+
+    deployment_name = request_data['deployment_name']
+    command = request_data['command']
+    argument = request_data['args']
+    namespace = "default"
+
+    def update_deployment1():
+    
+        # Creating a dynamic client
+        if (os.getenv("KUBERNETES_SERVICE_HOST") is not None):
+            client = dynamic.DynamicClient(
+                api_client.ApiClient(configuration=config.load_incluster_config())
+            )    
+        else:
+            client = dynamic.DynamicClient(
+                api_client.ApiClient(configuration=config.load_kube_config())
+            ) 
+            
+        # fetching the deployment api
+        api = client.resources.get(api_version="apps/v1", kind="Deployment")
+        
+        deployment_manifest = {
+                "apiVersion": "apps/v1",
+                "kind": "Deployment",
+                "metadata": {
+                    "name": deployment_name,
+                    "labels": {
+                    "app": "java"
+                    }
+                },
+                "spec": {
+                    "replicas": 1,
+                    "selector": {
+                    "matchLabels": {
+                        "app": "java"
+                    }
+                    },
+                    "template": {
+                    "metadata": {
+                        "labels": {
+                        "app": "java"
+                        }
+                    },
+                    "spec": {
+                        "containers": [
+                        {
+                            "name": "java11",
+                            "image": "openjdk:11",
+                            "command": [command],
+                            "args": [argument]
+                        }
+                    ]
+                    }
+                }
+            }
+        }
+
+        deployment_patched = api.patch(
+        body=deployment_manifest, name=deployment_name, namespace=namespace
+        )
+
+        print(deployment_patched)
+        print(f"\n[INFO] deployment {deployment_name} updated\n")
+        return f"\n[INFO] deployment {deployment_name} updated\n"
+
+    update_deployment1()
+    
+    def deployment_restart2():
+
+        #config.load_incluster_config()
+        
+        # Enter name of deployment and "namespace"
+
+        v1_apps = client.AppsV1Api()
+
+        now = datetime.datetime.utcnow()
+        now = str(now.isoformat("T") + "Z")
+        body = {
+            'spec': {
+                'template':{
+                    'metadata': {
+                        'annotations': {
+                            'kubectl.kubernetes.io/restartedAt': now
+                        }
+                    }
+                }
+            }
+        }
+        try:
+            deployment_restarted = v1_apps.patch_namespaced_deployment(deployment_name, namespace, body, pretty='true')
+            print(deployment_restarted)
+            return f"\n[INFO] deployment {deployment_name} restarted\n"
+
+
+        except ApiException as e:
+            print("Exception when calling AppsV1Api->read_namespaced_deployment_status: %s\n" % e)
+
+    deployment_restart2()
+    
+    
+    return f"\n[INFO] deployment {deployment_name} updated and restarted \n"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
