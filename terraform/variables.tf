@@ -71,3 +71,19 @@ variable "datadog_secret_manager_arn" {
   type = string
   description = "arn of datadog secrets (api and app keys) in secrets manager"
 }
+
+
+# Additions for existing vpc
+variable "vpc_id" {
+  description = "vpc id of existing vpc"
+}
+
+variable "public_subnets_cidrs" {
+  description = "cidrs for public subnets"
+}
+
+variable "private_subnets_cidrs" {
+  description = "cidrs for private subnets"
+}
+
+

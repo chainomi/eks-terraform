@@ -3,17 +3,19 @@ module "eks" {
   version         = "17.24.0"
   cluster_name    = local.cluster_name
   cluster_version = "1.21"
-  subnets         = module.vpc.private_subnets
   enable_irsa     = true
   # cluster_enabled_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
-  vpc_id = module.vpc.vpc_id
+  #change for existing vpc
+  subnets      = module.vpc.private_subnets
+  vpc_id          = var.vpc_id
 
   #IAM
   # workers_additional_policies = ["arn:aws:iam::aws:policy/AmazonSQSReadOnlyAccess"]
   cluster_iam_role_name = "eks-${var.application_name}-${var.environment}-cluster-role"
   workers_role_name = "eks-${var.application_name}-${var.environment}-worker-node-role"
-  workers_additional_policies = ["${aws_iam_policy.additional_node_policy.arn}"]
+  # additional custom policy added and SSM policy added for SSM ssh access and etc
+  workers_additional_policies = ["${aws_iam_policy.additional_node_policy.arn}", "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"]
 
   workers_group_defaults = {
     root_volume_type = "gp2"

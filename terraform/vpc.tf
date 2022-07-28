@@ -10,18 +10,22 @@ resource "random_string" "suffix" {
   special = false
 }
 
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "3.2.0"
 
-  name                 = "${var.environment}-${var.application_name}-vpc"
-  cidr                 = "10.0.0.0/16"
-  azs                  = data.aws_availability_zones.available.names
-  private_subnets      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets       = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-  enable_nat_gateway   = true
-  single_nat_gateway   = true
-  enable_dns_hostnames = true
+resource "random_id" "random_id_prefix" {
+  byte_length = 2
+}
+
+
+
+module "vpc" {
+  source               = "./networking"
+  region               = var.region
+  environment          = var.environment
+  application          = var.application_name
+  vpc_id               = var.vpc_id
+  public_subnets_cidr  = var.public_subnets_cidrs
+  private_subnets_cidr = var.private_subnets_cidrs
+  availability_zones   = data.aws_availability_zones.available.names
 
   tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
@@ -36,4 +40,5 @@ module "vpc" {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"             = "1"
   }
+
 }
