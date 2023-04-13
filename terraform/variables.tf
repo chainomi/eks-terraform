@@ -23,7 +23,35 @@ variable "minimum_nodes" {
 
 variable "maximum_nodes" {
     description = "maximum number of worker nodes"
+
 }
+variable "managed_node_group_name" {
+  description = "managed node group 1 name"
+  
+}
+variable "managed_node_instance_types" {
+  description = "types of desired instance types for node groups"
+}
+
+variable "managed_node_capacity_type" {
+    description = "desired capacity type for managed nodes e.g. SPOT or ON-DEMAND"
+}
+
+variable "managed_node_desired_capacity" {
+    description = "desired number of managed nodes"
+
+}
+
+variable "managed_node_max_capacity" {
+    description = "maximum number of managed nodes"
+
+}
+
+variable "managed_node_min_capacity" {
+    description = "minimum number of managed nodes"
+
+}
+
 
 variable "admin_access_role_name"{
     description = "the name of the admin role in AWS, this will map the Admin role to the cluster role xxxx .."

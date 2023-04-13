@@ -47,6 +47,47 @@ module "eks" {
     }
   ]
 
+ node_groups_defaults = {
+    ami_type  = "AL2_x86_64"
+    disk_size = 50
+  }
+
+  node_groups = {
+    "${var.managed_node_group_name}" = {
+      name_prefix = "${local.cluster_name}-managed-node" 
+      desired_capacity = var.managed_node_desired_capacity
+      max_capacity     = var.managed_node_max_capacity
+      min_capacity     = var.managed_node_min_capacity
+
+      instance_types = var.managed_node_instance_types
+
+      #launch templates only used to add name tags to managed nodes
+      launch_template_id      = aws_launch_template.nodegroup1.id
+      launch_template_version = aws_launch_template.nodegroup1.default_version
+
+      # labels = {
+      #     Name = "${local.cluster_name}-managed-node"
+      # }      
+      capacity_type  = var.managed_node_capacity_type
+
+      k8s_labels = {
+        Example    = "managed_node_groups"
+        GithubRepo = "terraform-aws-eks"
+        GithubOrg  = "terraform-aws-modules"
+      }
+
+
+      additional_tags = {
+        ExtraTag = "example"
+      }
+
+      update_config = {
+        max_unavailable_percentage = 20 # or set `max_unavailable`
+      }
+    }
+  }
+
+
     # Fargate Profile(s)
  fargate_profiles = {
     default = {
@@ -83,6 +124,7 @@ module "eks" {
   
 
 }
+
 
 
 # Pulling data for kubernetes provider "kubernetes.tf"
@@ -158,3 +200,5 @@ resource "helm_release" "metrics_server" {
 
 #   # Repo https://artifacthub.io/packages/helm/aws/aws-for-fluent-bit
 # }
+
+
